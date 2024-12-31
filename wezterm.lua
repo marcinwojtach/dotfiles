@@ -1,25 +1,6 @@
 local wezterm = require("wezterm")
 local user_path = "/Users/" .. os.getenv("USER") .. "/."
-
-function compute_padding(window)
-	local window_dimensions = window:get_dimensions()
-	local overrides = window:get_config_overrides() or {}
-
-	if not window_dimensions.is_full_screen then
-		return
-	else
-		local new_padding = {
-			top = 0,
-			right = 5,
-			left = 5,
-			bottom = 0,
-		}
-
-		overrides.window_padding = new_padding
-	end
-
-	window:set_config_overrides(overrides)
-end
+require("events")
 
 config = wezterm.config_builder()
 
@@ -27,17 +8,21 @@ config = {
 	automatically_reload_config = true,
 	enable_tab_bar = true,
 	use_fancy_tab_bar = true,
-	hide_tab_bar_if_only_one_tab = true,
+	show_new_tab_button_in_tab_bar = false,
+	-- show_close_tab_button_in_tabs = false,
+	hide_tab_bar_if_only_one_tab = false,
 	window_close_confirmation = "NeverPrompt",
 	window_decorations = "INTEGRATED_BUTTONS | RESIZE",
 	default_cursor_style = "BlinkingBar",
 	color_scheme = "Nord (Gogh)",
-	font = wezterm.font("JetBrains Mono", { weight = "Bold" }),
+	-- font = wezterm.font("JetBrains Mono", { weight = "Bold" }),
+	-- font = wezterm.font("Fira Code", { weight = "DemiBold", stretch = "Normal", style = "Normal" }),
+	font = wezterm.font("Maple Mono NF", { weight = "Bold", stretch = "Normal", style = "Normal" }),
 	font_size = 13,
 	window_padding = {
-		left = 5,
-		right = 5,
-		top = 30,
+		left = 0,
+		right = 0,
+		top = 0,
 		bottom = 0,
 	},
 	initial_rows = 30,
@@ -48,31 +33,26 @@ config = {
 				File = user_path .. "/.config/wezterm/bg.jpg",
 			},
 			hsb = {
-				saturation = 1.3,
-				brightness = 0.2,
+				saturation = 0.3,
+				brightness = 0.05,
 			},
 		},
 		{
 			source = {
-				Color = "#0e264d",
+				Color = "1E1E2E",
 			},
 			width = "100%",
 			height = "100%",
-			opacity = 0.1,
+			opacity = 0.4,
 		},
 	},
 	colors = {
 		tab_bar = {},
 	},
+	window_frame = {
+		active_titlebar_bg = "#000",
+	},
 	default_cwd = user_path,
 }
-
-wezterm.on("window-resized", function(window, pane)
-	compute_padding(window)
-end)
-
-wezterm.on("window-config-reloaded", function(window, pane)
-	compute_padding(window)
-end)
 
 return config
